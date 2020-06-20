@@ -1,0 +1,21 @@
+[package]
+name = "obamas"
+version = "0.1.0"
+authors = ["Raphaël Thériault <raphael_theriault@outlook.com>"]
+edition = "2018"
+license = "MIT"
+description = "The Obama System, or ObamaS, an entreprise grade x86_64 operating system"
+
+[dependencies]
+bootloader = "0.9"
+uart_16550 = "0.2"
+x86_64 = "0.11"
+
+[package.metadata.bootimage]
+test-args = [
+    "-device", "isa-debug-exit,iobase=0xf4,iosize=0x04",
+    "-serial", "stdio",
+    "-display", "none",
+]
+test-success-exit-code = 33
+test-timeout = 300
