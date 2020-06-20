@@ -5,6 +5,10 @@ use core::ptr;
 pub struct Volatile<T: Copy>(T);
 
 impl<T: Copy> Volatile<T> {
+    pub const fn new(val: T) -> Self {
+        Self(val)
+    }
+
     pub fn read(&self) -> T {
         unsafe { ptr::read_volatile(&self.0) }
     }

@@ -8,6 +8,8 @@ use obamas::println;
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
+    obamas::init();
+
     println!("ObamaS started successfully");
 
     #[cfg(test)]

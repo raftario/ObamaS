@@ -9,6 +9,7 @@ const UNINIT: usize = 0x0;
 const RUNNING: usize = 0x1;
 const INIT: usize = 0x2;
 
+#[derive(Debug)]
 pub struct Once<T> {
     state: AtomicUsize,
     val: UnsafeCell<MaybeUninit<T>>,
@@ -71,6 +72,7 @@ impl<T> Default for Once<T> {
     }
 }
 
+#[derive(Debug)]
 pub struct Lazy<T, F = fn() -> T>
 where
     F: FnOnce() -> T,
