@@ -1,5 +1,5 @@
-pub mod lazy;
 pub mod mutex;
+pub mod once;
 
-pub use lazy::Lazy;
 pub use mutex::Mutex;
+pub use once::{Lazy, Once};

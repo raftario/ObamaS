@@ -45,14 +45,14 @@ impl<T: ?Sized> Drop for MutexGuard<'_, T> {
     }
 }
 
-impl<'a, T: ?Sized> Deref for MutexGuard<'a, T> {
+impl<T: ?Sized> Deref for MutexGuard<'_, T> {
     type Target = T;
 
     fn deref(&self) -> &Self::Target {
         self.val
     }
 }
-impl<'a, T: ?Sized> DerefMut for MutexGuard<'a, T> {
+impl<T: ?Sized> DerefMut for MutexGuard<'_, T> {
     fn deref_mut(&mut self) -> &mut Self::Target {
         self.val
     }
