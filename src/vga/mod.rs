@@ -2,12 +2,13 @@ use crate::{
     mem::Volatile,
     sync::{Lazy, Mutex},
 };
-use core::fmt;
+use core::fmt::{self, Write};
 
 #[doc(hidden)]
 pub fn _print(args: fmt::Arguments) {
-    use fmt::Write;
-    WRITER.lock().write_fmt(args).unwrap();
+    x86_64::instructions::interrupts::without_interrupts(|| {
+        WRITER.lock().write_fmt(args).unwrap();
+    });
 }
 
 static WRITER: Lazy<Mutex<Writer>> = Lazy::new(|| Mutex::new(Writer::new()));
@@ -168,11 +169,18 @@ mod tests {
 
     #[test_case]
     fn println_output() {
+        use crate::vga::{BUFFER_HEIGHT, WRITER};
+        use core::fmt::Write;
+        use x86_64::instructions::interrupts;
+
         let s = "Hello, World!";
-        println!("{}", s);
-        for (i, c) in s.chars().enumerate() {
-            let sc = super::WRITER.lock().buffer.chars[super::BUFFER_HEIGHT - 2][i].read();
-            assert_eq!(char::from(sc.character), c);
-        }
+        interrupts::without_interrupts(|| {
+            let mut writer = WRITER.lock();
+            writeln!(writer, "\n{}", s).expect("writeln failed");
+            for (i, c) in s.chars().enumerate() {
+                let sc = writer.buffer.chars[BUFFER_HEIGHT - 2][i].read();
+                assert_eq!(char::from(sc.character), c);
+            }
+        });
     }
 }

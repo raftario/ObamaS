@@ -10,19 +10,20 @@ use obamas::println;
 pub extern "C" fn _start() -> ! {
     obamas::init();
 
-    println!("ObamaS started successfully");
+    println!("ObamaS booted successfully");
+    println!("Hawaiian pizza sucks");
 
     #[cfg(test)]
     _test();
 
-    loop {}
+    obamas::halt();
 }
 
 #[cfg(not(test))]
 #[panic_handler]
 fn panic(info: &core::panic::PanicInfo) -> ! {
     println!("{}", info);
-    loop {}
+    obamas::halt();
 }
 
 #[cfg(test)]

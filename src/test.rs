@@ -25,5 +25,5 @@ pub fn panic_handler(info: &core::panic::PanicInfo) -> ! {
     s1println!("err");
     s1println!("{}", info);
     crate::qemu::exit(crate::qemu::ExitCode::Failed);
-    loop {}
+    crate::halt();
 }

@@ -1,11 +1,12 @@
 use crate::sync::{Lazy, Mutex};
-use core::fmt;
+use core::fmt::{self, Write};
 use uart_16550::SerialPort;
 
 #[doc(hidden)]
 pub fn _print1(args: fmt::Arguments) {
-    use fmt::Write;
-    SERIAL1.lock().write_fmt(args).unwrap();
+    x86_64::instructions::interrupts::without_interrupts(|| {
+        SERIAL1.lock().write_fmt(args).unwrap();
+    });
 }
 
 pub static SERIAL1: Lazy<Mutex<SerialPort>> = Lazy::new(|| {

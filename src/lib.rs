@@ -24,12 +24,18 @@ pub mod test;
 pub extern "C" fn _start() -> ! {
     init();
     _test();
-    loop {}
+    halt()
 }
 
 pub fn init() {
     gdt::init();
     interrupts::init();
+}
+
+pub fn halt() -> ! {
+    loop {
+        x86_64::instructions::hlt();
+    }
 }
 
 #[cfg(test)]

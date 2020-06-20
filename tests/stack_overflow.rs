@@ -18,7 +18,7 @@ static TEST_IDT: Lazy<InterruptDescriptorTable> = Lazy::new(|| {
 extern "x86-interrupt" fn test_double_fault_handler(_: &mut InterruptStackFrame, _: u64) -> ! {
     s1println!("ok");
     qemu::exit(qemu::ExitCode::Success);
-    loop {}
+    obamas::halt();
 }
 
 #[no_mangle]

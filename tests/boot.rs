@@ -9,7 +9,7 @@ use obamas::println;
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
     _test();
-    loop {}
+    obamas::halt();
 }
 
 #[panic_handler]

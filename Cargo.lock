@@ -19,12 +19,35 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "56452f4da420d25cf4bbf5b8fdc1529a8bde79a081f2619ce7ebc6d581117261"
 
 [[package]]
+name = "cpuio"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d531514efb06912141fa65967447de805691b685a7565c87d1765afe34a98aa7"
+
+[[package]]
 name = "obamas"
 version = "0.1.0"
 dependencies = [
  "bootloader",
+ "pc-keyboard",
+ "pic8259_simple",
  "uart_16550",
  "x86_64",
+]
+
+[[package]]
+name = "pc-keyboard"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c48392db76c4e9a69e0b3be356c5f97ebb7b14413c5e4fd0af4755dbf86e2fce"
+
+[[package]]
+name = "pic8259_simple"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "af2a5497fb8e59bf8015f67b7dff238d75ef445e03f23edac24ac3a8f09be952"
+dependencies = [
+ "cpuio",
 ]
 
 [[package]]

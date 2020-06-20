@@ -8,6 +8,8 @@ description = "The Obama System, or ObamaS, an entreprise grade x86_64 operating
 
 [dependencies]
 bootloader = "0.9"
+pc-keyboard = "0.5"
+pic8259_simple = "0.2"
 uart_16550 = "0.2"
 x86_64 = "0.11"
 
