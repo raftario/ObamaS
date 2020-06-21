@@ -61,7 +61,9 @@ impl<T> Once<T> {
         }
     }
 
-    unsafe fn force_get(&self) -> &T {
+    /// # Safety
+    /// Creates a reference to uninitialised memory if the instance isn't initialised
+    pub unsafe fn force_get(&self) -> &T {
         &*(*self.val.get()).as_ptr()
     }
 }

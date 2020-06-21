@@ -6,8 +6,7 @@ use x86_64::structures::idt::InterruptDescriptorTable;
 
 pub fn init() {
     IDT.load();
-    unsafe { hardware::PICS.lock().initialize() };
-    x86_64::instructions::interrupts::enable();
+    hardware::init();
 }
 
 pub static IDT: Lazy<InterruptDescriptorTable> = Lazy::new(|| {

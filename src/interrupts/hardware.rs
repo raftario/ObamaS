@@ -6,12 +6,17 @@ use x86_64::{
     structures::idt::{InterruptDescriptorTable, InterruptStackFrame},
 };
 
+pub fn init() {
+    unsafe { PICS.lock().initialize() };
+    x86_64::instructions::interrupts::enable();
+}
+
 pub fn set_handlers(idt: &mut InterruptDescriptorTable) {
     idt[InterruptIndex::Timer.into()].set_handler_fn(timer_handler);
     idt[InterruptIndex::Keyboard.into()].set_handler_fn(keyboard_handler);
 }
 
-pub static PICS: Mutex<ChainedPics> =
+static PICS: Mutex<ChainedPics> =
     Mutex::new(unsafe { ChainedPics::new(PIC_1_OFFSET, PIC_2_OFFSET) });
 
 const PIC_1_OFFSET: u8 = 32;

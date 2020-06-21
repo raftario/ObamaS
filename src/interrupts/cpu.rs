@@ -1,5 +1,8 @@
 use crate::gdt::DOUBLE_FAULT_IST_INDEX;
-use x86_64::structures::idt::{InterruptDescriptorTable, InterruptStackFrame};
+use x86_64::{
+    registers::control::Cr2,
+    structures::idt::{InterruptDescriptorTable, InterruptStackFrame, PageFaultErrorCode},
+};
 
 pub fn set_handlers(idt: &mut InterruptDescriptorTable) {
     unsafe {
@@ -9,14 +12,26 @@ pub fn set_handlers(idt: &mut InterruptDescriptorTable) {
     }
 
     idt.breakpoint.set_handler_fn(breakpoint_handler);
+    idt.page_fault.set_handler_fn(page_fault_handler);
 }
 
-extern "x86-interrupt" fn double_fault_handler(stack_frame: &mut InterruptStackFrame, _: u64) -> ! {
-    panic!("EXCEPTION: DOUBLE FAULT\n{:#?}", stack_frame);
+extern "x86-interrupt" fn double_fault_handler(sf: &mut InterruptStackFrame, _: u64) -> ! {
+    panic!("EXCEPTION: DOUBLE FAULT\n{:#?}", sf);
 }
 
-extern "x86-interrupt" fn breakpoint_handler(stack_frame: &mut InterruptStackFrame) {
-    println!("EXCEPTION: BREAKPOINT\n{:#?}", stack_frame);
+extern "x86-interrupt" fn breakpoint_handler(sf: &mut InterruptStackFrame) {
+    println!("EXCEPTION: BREAKPOINT\n{:#?}", sf);
+}
+
+extern "x86-interrupt" fn page_fault_handler(
+    sf: &mut InterruptStackFrame,
+    err: PageFaultErrorCode,
+) {
+    println!("EXCEPTION: PAGE FAULT");
+    println!("Accessed Address: {:?}", Cr2::read());
+    println!("Error Code: {:?}", err);
+    println!("{:#?}", sf);
+    crate::halt();
 }
 
 #[cfg(test)]

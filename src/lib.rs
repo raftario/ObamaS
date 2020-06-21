@@ -2,9 +2,12 @@
 #![cfg_attr(test, no_main)]
 #![feature(const_fn)]
 #![feature(abi_x86_interrupt)]
+#![feature(alloc_error_handler)]
 #![feature(custom_test_frameworks)]
 #![test_runner(crate::test::runner)]
 #![reexport_test_harness_main = "_test"]
+
+extern crate alloc;
 
 #[macro_use]
 mod macros;
@@ -42,4 +45,9 @@ pub fn halt() -> ! {
 #[panic_handler]
 fn panic(info: &core::panic::PanicInfo) -> ! {
     test::panic_handler(info)
+}
+
+#[alloc_error_handler]
+fn alloc_error_handler(layout: alloc::alloc::Layout) -> ! {
+    panic!("allocation error: {:?}", layout)
 }
