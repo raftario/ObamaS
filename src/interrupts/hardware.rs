@@ -36,7 +36,7 @@ impl From<InterruptIndex> for usize {
 }
 
 extern "x86-interrupt" fn timer_handler(_: &mut InterruptStackFrame) {
-    print!(".");
+    // print!(".");
     unsafe {
         PICS.lock()
             .notify_end_of_interrupt(InterruptIndex::Timer as u8);
