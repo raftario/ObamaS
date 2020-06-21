@@ -32,10 +32,10 @@ fn panic(info: &core::panic::PanicInfo) -> ! {
 
 #[test_case]
 fn boxes() {
-    let box1 = Box::new(12);
-    let box2 = Box::new(34);
-    assert_eq!(*box1, 12);
-    assert_eq!(*box2, 34);
+    let box1 = Box::new(21);
+    let box2 = Box::new(12);
+    assert_eq!(*box1, 21);
+    assert_eq!(*box2, 12);
 }
 
 #[test_case]
@@ -49,9 +49,19 @@ fn vec() {
 }
 
 #[test_case]
-fn fill_heap() {
+fn fill() {
     for i in 0..obamas::mem::alloc::HEAP_SIZE {
         let x = Box::new(i);
         assert_eq!(*x, i);
     }
+}
+
+#[test_case]
+fn fill_long_lived() {
+    let long = Box::new(2112);
+    for i in 0..obamas::mem::alloc::HEAP_SIZE {
+        let x = Box::new(i);
+        assert_eq!(*x, i);
+    }
+    assert_eq!(*long, 2112);
 }
