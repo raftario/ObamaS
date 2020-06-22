@@ -94,12 +94,14 @@ impl JitterRng {
     const APT_LSB: u64 = 16;
     const APT_WORD_MASK: u64 = Self::APT_LSB - 1;
 
+    // https://github.com/smuellerDD/jitterentropy-library/blob/master/jitterentropy-base.c#L114
     fn apt_reset(&mut self, delta_masked: u64) {
         self.apt_count = 0;
         self.apt_base = delta_masked;
         self.apt_observations = 0;
     }
 
+    // https://github.com/smuellerDD/jitterentropy-library/blob/master/jitterentropy-base.c#L128
     fn apt_insert(&mut self, delta_masked: u64) {
         if !self.apt_base_set {
             self.apt_base = delta_masked;
@@ -122,6 +124,7 @@ impl JitterRng {
         }
     }
 
+    // https://github.com/smuellerDD/jitterentropy-library/blob/master/jitterentropy-base.c#L223
     #[inline]
     fn delta(prev: u64, next: u64) -> u64 {
         if prev < next {
@@ -131,6 +134,7 @@ impl JitterRng {
         }
     }
 
+    // https://github.com/smuellerDD/jitterentropy-library/blob/master/jitterentropy-base.c#L243
     fn stuck(&mut self, current_delta: u64) -> bool {
         let delta2 = Self::delta(self.last_delta, current_delta);
         let delta3 = Self::delta(self.last_delta2, delta2);
@@ -148,6 +152,7 @@ impl JitterRng {
         false
     }
 
+    // https://github.com/smuellerDD/jitterentropy-library/blob/master/jitterentropy-base.c#L303
     fn loop_shuffle(&self, bits: u64, min: u64) -> u64 {
         let mut time = tsc() ^ self.data;
 
@@ -161,6 +166,7 @@ impl JitterRng {
         shuffle + (1 << min)
     }
 
+    // https://github.com/smuellerDD/jitterentropy-library/blob/master/jitterentropy-base.c#L356
     fn lfsr_time(&mut self, time: u64, stuck: bool) {
         const MAX_FOLD_LOOP_BIT: u64 = 4;
         const MIN_FOLD_LOOP_BIT: u64 = 0;
@@ -188,6 +194,7 @@ impl JitterRng {
         }
     }
 
+    // https://github.com/smuellerDD/jitterentropy-library/blob/master/jitterentropy-base.c#L437
     fn memaccess(&mut self) {
         const MAX_ACC_LOOP_BIT: u64 = 7;
         const MIN_ACC_LOOP_BIT: u64 = 0;
@@ -204,6 +211,7 @@ impl JitterRng {
         }
     }
 
+    // https://github.com/smuellerDD/jitterentropy-library/blob/master/jitterentropy-base.c#L491
     fn measure_jitter(&mut self) -> bool {
         self.memaccess();
 
@@ -218,6 +226,7 @@ impl JitterRng {
         stuck
     }
 
+    // https://github.com/smuellerDD/jitterentropy-library/blob/master/jitterentropy-base.c#L523
     fn gen_entropy(&mut self) {
         self.measure_jitter();
 
