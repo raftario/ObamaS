@@ -73,6 +73,7 @@ unsafe impl GlobalAlloc for Mutex<BlockAlloc> {
                 let new_block = Block {
                     next: allocator.heads[idx].take(),
                 };
+                #[allow(clippy::cast_ptr_alignment)]
                 let mew_block_ptr = ptr as *mut Block;
                 mew_block_ptr.write(new_block);
                 allocator.heads[idx] = Some(&mut *mew_block_ptr);

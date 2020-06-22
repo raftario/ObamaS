@@ -1,4 +1,5 @@
 use crate::sync::{Lazy, Mutex};
+use core::sync::atomic::Ordering;
 use pc_keyboard::{layouts, DecodedKey, HandleControl, Keyboard, ScancodeSet1};
 use pic8259_simple::ChainedPics;
 use x86_64::{
@@ -36,7 +37,8 @@ impl From<InterruptIndex> for usize {
 }
 
 extern "x86-interrupt" fn timer_handler(_: &mut InterruptStackFrame) {
-    // print!(".");
+    crate::time::TICKS.fetch_add(1, Ordering::Relaxed);
+
     unsafe {
         PICS.lock()
             .notify_end_of_interrupt(InterruptIndex::Timer as u8);
