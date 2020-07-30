@@ -8,7 +8,6 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: nightly
-          profile: minimal
           components: clippy, rustfmt
           override: true
       - uses: actions/cache@v2
@@ -25,6 +24,8 @@ jobs:
           rustup component add rust-src llvm-tools-preview &&
           cargo install cargo-xbuild &&
           cargo install bootimage
+        env:
+          CARGO_TARGET_DIR: target/install
       - name: Run tests
         uses: actions-rs/cargo@v1
         with:
