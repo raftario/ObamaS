@@ -8,20 +8,16 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: nightly
+          profile: minimal
           components: clippy, rustfmt
           override: true
-      - uses: actions/cache@v1
+      - uses: actions/cache@v2
         with:
-          path: ~/.cargo/registry
-          key: cargo-registry-${{ hashFiles('**/Cargo.toml') }}
-      - uses: actions/cache@v1
-        with:
-          path: ~/.cargo/git
-          key: cargo-index-${{ hashFiles('**/Cargo.toml') }}
-      - uses: actions/cache@v1
-        with:
-          path: target
-          key: cargo-build-target-${{ hashFiles('**/Cargo.toml') }}
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Install dependencies
         run: |
           sudo apt-get update &&
@@ -39,7 +35,7 @@ jobs:
           command: bootimage
           args: --release
       - name: Upload boot image
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: Boot Image
           path: target/x86_64-unknown-none/release/bootimage-obamas.bin
