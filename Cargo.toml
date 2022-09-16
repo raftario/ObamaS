@@ -8,7 +8,7 @@ description = "The Obama System, or ObamaS, an entreprise grade x86_64 operating
 
 [dependencies]
 bootloader = { version = "0.9", features = ["map_physical_memory"] }
-linked_list_allocator = "0.8"
+linked_list_allocator = "0.10"
 pc-keyboard = "0.5"
 pic8259_simple = "0.2"
 rand_core = { version = "0.5", features = ["alloc"], default-features = false }
